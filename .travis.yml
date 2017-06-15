@@ -1,0 +1,19 @@
+language: bash
+services: docker
+branches:
+  only:
+    - master
+env:
+  - ARCH=amd64  VERSION=current
+  - ARCH=arm    VERSION=current
+before_script:
+  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+  - sed -ie "s/FROM alpine:3.6/FROM multiarch\/alpine:${ARCH}\-v3.6/" Dockerfile
+script:
+  - docker build --build-arg ARCH=${ARCH} --build-arg VERSION=${VERSION} -t lafin/rclone:${ARCH} .
+after_success:
+  - if [[ $TRAVIS_PULL_REQUEST == 'false' ]]; then
+      if [[ $(docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD") ]]; then
+        docker push lafin/rclone;
+      fi
+    fi
