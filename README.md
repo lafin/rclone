@@ -22,12 +22,12 @@ Rclone is a command line program to sync files and directories to and from
 Run it (displays version info):
 
 ```bash
-/usr/bin/docker run --rm lafin/rclone
+$ docker run --rm lafin/rclone:x86_64
 ```
 
 Interactive configuration:
 
 ```bash
 mkdir config
-/usr/bin/docker run --rm -it -v "$PWD"/config:/config lafin/rclone config
+$ docker run --rm -it -v $(PWD)/config:/config lafin/rclone:x86_64 config
 ```
